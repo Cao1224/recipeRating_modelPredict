@@ -1,4 +1,4 @@
-# recipeRating_modelPredict
+# Protein Prediction Power
 
 by Yuancheng Cao (yuc094@ucsd.edu), Grace Chen
 
