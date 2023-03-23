@@ -10,7 +10,7 @@ Credit: [UC San Diego DSC 80 Winter 2023 Course Project 5 Instruction](https://d
 
 ## Baseline Model
 
-The baselind model is a linear regression model with degree of 3 polynomial features, I chose 3 featuress related to protein content.
+The baselind model is a linear regression model with degree of 2 polynomial features, I chose 3 featuress related to protein content.
 - `calories`
   - Calorie content affects the protein content of a recipe, since high-calorie foods are often high protein. For example, meat🥩 annd dairy🧀 products are high in calories and protein. However, it should be noted that not all high-calorie foods are high-protein, and not all high-protein foods are high-calorie. Some 🫘plant-based proteins are also high!
 - `total fat` (PDV)
