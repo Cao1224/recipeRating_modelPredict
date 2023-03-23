@@ -10,8 +10,7 @@ Credit: [UC San Diego DSC 80 Winter 2023 Course Project 5 Instruction](https://d
 
 ## Baseline Model
 
-#### Features:
-
+**Features:**
 - calories
   - 
 - total fat (PDV)
