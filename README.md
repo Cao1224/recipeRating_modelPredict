@@ -4,6 +4,8 @@ by Yuancheng Cao (yuc094@ucsd.edu), Grace Chen
 
 Credit: [UC San Diego DSC 80 Winter 2023 Course Project 5 Instruction](https://dsc80.com/project5/) 🙏
 
+Our exploratory data analysis on this dataset can be [found](https://cao1224.github.io/recipeRatings_EDA/).😉
+
 ## Problem Identification
 
 
