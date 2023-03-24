@@ -96,5 +96,5 @@ We will define recipes with a 4.0 rating or higher as a recipe with high ratings
 
 Now, we will perform a permutation test to answer our question. Null Hypothesis: Our model is fair. Its RMSE for high rating recipes and low rating recipes are roughly the same, and any differences are due to random chance. Alternative Hypothesis: Our model is unfair. Its RMSE for high rating recipes is lower than its RMSE for low rating recipes.
 
-We will use: [RMSE for high rating recipes - RMSE for low rating recipes] as our test statistic and we choose a significane level at ɑ = 0.05.
+We will use: [RMSE for low rating recipes - RMSE for high rating recipes] as our test statistic and we choose a significane level at ɑ = 0.05.
 
