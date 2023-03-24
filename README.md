@@ -91,10 +91,15 @@ Linear regression model with degree of 2 polunomial features have negative prote
 
 ## Fairness Analysis
 Does our model perform better for recipes with high ratings than it does for recipes with low ratings?
+
 We will define recipes with a 4.0 rating or higher as a recipe with high ratings, there are 206,983 total recipes from the dataframe that we considered as recipes with high ratings. We will define recipes with less than 4.0 rating as a recipe with low ratings, there are 12,410 total recipes from the dataframe that we considered as recipes with low ratings. 
+
 Now, we will perform a permutation test to answer our question. Null Hypothesis: Our model is fair. Its RMSE for high rating recipes and low rating recipes are roughly the same, and any differences are due to random chance. Alternative Hypothesis: Our model is unfair. Its RMSE for high rating recipes is lower than its RMSE for low rating recipes.
+
 We expected RMSE for low rating recipes to be higher, so we will use: RMSE for low rating recipes - RMSE for high rating recipes as our test statistics. We choose a significane level at ɑ = 0.05
 
+
 From 100 repetitions, we got a p-value of 0.56, this is greater than the significane level at ɑ = 0.05. Therefore, we fail to reject the null hypothesis. From the permutation test, we can conclude that our model is likely fair. Specifically, RMSE for high rating recipes and low rating recipes are roughly the same, and any differences are due to random chance. In fact, from the negative observed statistic, we saw that RMSE for high rating recipes is actually slightly higher than RMSE for low rating recipe! This is not what we expected!
+
 From the plot, we can also summarize that an observed difference of -1.9 is totally reasonable given.
 
