@@ -36,7 +36,7 @@ Hence, k-fold cross-validation was used to find the best fit polynomial. The 5-f
 - **Degree of 1**
   - RMSE of training is 16.25; RMSE of testing is 16.17
   - Training accuracy is 0.89; Testing accuracy is 0.88
-- **Degree of 2**
+- 👀 **Degree of 2**
   - RMSE of training is 15.42; RMSE of testing is 15.39
   - Training accuracy is 0.90; Testing accuracy is 0.89
 
@@ -44,26 +44,47 @@ Based on the results, both models seem to perform similarly, with the degree of 
 
 
 ## Final Model
-The dataframe has 11 columns including seasons, vegetarian, cooking_method, red_meat, calories, total_fat, sugar, sodium, saturated_fat, carbohydrates, and protein. The columns seasons, vegetarian, cooking_method, and red_meat represent the number of tags related to specific food items and are already numeric, so no transformer is needed for these columns.
+The dataframe has 10 columns including vegetarian, cooking_method, red_meat, calories, total_fat, sugar, sodium, saturated_fat, carbohydrates, and protein. The columns vegetarian, cooking_method, and red_meat represent the number of tags related to specific ingredients or methods and are already numeric, so no transformer is needed for these columns.
 
-**New Features without Transformer**:
-- `seasons`: number of tags related to spring, summer, fall, and winter
-  - We included this variable as it may impact the nutritional content of the recipes. For example, certain seasons may be associated with higher availability of certain ingredients, which in turn may affect the protein content of the recipe.
+**🆕 New Features without Transformer**:
+- `vegetarian`: number of tags related to beans, lentils, and soy-tofu
+  - The variable `vegetarian` was included in the model as it is believed that recipes with a higher number of vegetarian-related tags may have a higher protein content due to the inclusion of protein-rich plant-based ingredients such as beans and lentils. 
 - `cooking_method`: number of tags related to oven and steam
   - We included this variable as different cooking methods may have different effects on the nutritional content of the recipe, such as the protein content.
 - `red_meat`: number of tags related to beef-organ-meats, beef, and roast_beef
   - We included this variable as it may impact the protein content of the recipe. Red meat is a common source of protein, and recipes that include red meat may have higher protein content compared to those that do not.
 
-The following 3 combincations of varaibles can be used to predict protein content:
-1. vegetarian, red_meat, calories, total_fat, carbohydrates
-  - Linear Regressioon: RMSE of training is 16.25; RMSE of testing is 16.17
-  - 
-2. vegetarian, cooking_method, red_meat, calories, total_fat, carbohydrates, sugar, sodium
-  - Linear Regressioon: RMSE of training is 16.12; RMSE of testing is 16.06
-3. cooking_method, red_meat, calories, total_fat, sugar, sodium, saturated_fat, carbohydrates
-  - Linear Regressioon: RMSE of training is 16.13; RMSE of testing is 16.08
+**🆕 New and Old Nutritional Information with Transformer `StandardScaler`**
+We added the following features to the dataframe: `sugar`, `sodium`, `saturated fat`. We believe that these features improved our model's performance because they provide more nutritional information about the recipe and how it may affect the protein content. We used the `StandardScaler` transformer on the columns of calories, total fat, sugar, sodium, saturated fat, and carbohydrates. This transformer was used to scale the data to a mean of zero and a variance of one. This was done to ensure that all the features had equal importance in the model and that no feature would dominate the prediction. Overall, we believe that these features and transformer improved the performance of the model by providing more information about the recipe and standardizing the data for better accuracy.
 
+The following **3 combincations** of varaibles can be used to predict protein content:
+1. `vegetarian`, `red_meat`, `calories`, `total_fat`, `carbohydrates`
+  - Linear Regression: RMSE of training is 16.25; RMSE of testing is 16.17
+  - Degree of 1 Polynomial Regression with linear regression has same result as linear regression.
+2. `vegetarian`, `cooking_method`, `red_meat`, `calories`, `total_fat`, `carbohydrates`, `sugar`, `sodium`
+  - Linear Regression: RMSE of training is 16.12; RMSE of testing is 16.06
+3. `cooking_method`, `red_meat`, `calories`, `total_fat`, `sugar`, `sodium`, `saturated_fat`, `carbohydrates`
+  - Linear Regression: RMSE of training is 16.13; RMSE of testing is 16.08
 
+**Random Forest Regression 🌲**
+
+Based on the large size of our dataset with over 200,000 finding the optimal combination of hyperparameters for our Random Forest Regression model can be computationally expensive. As a result, we will set the number of trees in the forest and the maximum depth of the tree as small as possible to efficiently search for the best parameters. We used GridSearchCV to tune the hyperparameters of the model, including the number of estimators [100], the maximum depth of the tree [3, 4, 5, 10, 100]. Using GridSearch CV to search for the best hyperpameters for combination 1, we found that the number of trees in the forest and the maximum depth were both 100. We then trained the model on 70% of the dataset, with the remaining 30% used for testing, and with these hyperparameters and obtained a training error of 6.45 and a testing error of 11.60, resulting in a training accuracy of 0.98 and testing accuracy of 0.94. Based on these results, we decided to manually set different values for n_estimators and max_depth to see their effect on the model's performance, without using GridSearchCV.
+
+**Note:** First tuple is training and testing error, second tuple is accuracy of training and testing, last tuple is minimum value of training and testing dataset.
+- 🏆 **Combination 1: `n_estimators` is 100 and `max_depth` is 100**
+  - [(6.45, 11.60), (0.98, 0.94), (0, 0)]
+- Combination 2: `n_estimators` is 200 and `max_depth` is 100
+  - [(5.26, 14.39), (0.99, 0.90), (0, 0)]
+- Combination 3: `n_estimators` is 200 and `max_depth` is 150
+  - [(6.01, 13.74), (0.98, 0.91), (0, 0)]
+
+The accuracy of the model is evaluated using the training dataset and testing dataset. For Combination 1, the training accuracy is 0.98 and the testing accuracy is 0.93, which indicates that the model fits the data well and is also able to generalize to new data. However, for all three combinations, the test error is higher than the training error, which may indicate overfitting. But only Combination 1 has the smallest difference between test error and training error. This could be due to the higher number of estimators used in Combination 2 and the deeper trees in Combination 3, which may have led to overfitting the training data. Therefore, we decided to stick with the original hyperparameters of n_estimators = 100 and max_depth = 100. The Combination 1 mode performed reasonably well in predicting protein content based on the given features. However, there is still room for improvement as the testing error was relatively high. Additionally, it may be beneficial to explore additional features or different types of models to improve the accuracy of the predictions.
+
+Compared to the baseline model, which was a linear regression model with degree 2 polynomial features, the Combination 1 random forest model showed significant improvement in both training and testing accuracy. The baseline model had a training accuracy of 0.90 and a testing accuracy of 0.89, with RMSE of training as 15.42 and RMSE of testing as 15.39.
+
+**Back to Baseline Model Issue**
+
+Linear regression model with degree of 2 polunomial features have negative protein content in the training and testing datasets, while random forest regression does not have this problem. The reason may be that the linear regression model with degree of 2 polunomial features overfits the data, which means it is too complex and captures noisse rather than the true underlying pattern. Random forest regression is a nonparametric model that does not make assumptios about the functional form of the relationship between the predictor and target variables. Instead, it uses  a combination of decision trees to create predictions. This can make it more robust to outliers and nonlinear relationships between variables. The fact that random forest regression has a higher test error than training error, as this is common in complex models. However, it is important to monitor the gap between the training error and the test error to ensure that the model does not overfit the data.
 
 
 ## Fairness Analysis
