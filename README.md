@@ -10,7 +10,7 @@ Our exploratory data analysis on this dataset can be [found](https://cao1224.git
 
 Continuing from our previous research, we thought it would be an interesting investigation to estimate the protein content of a recipe. Our prediction problem is: **How to predict the protein content of a recipe from other nutrition information?** We will produce a regression model to predict quantitative responses. The response variable we chose is the protein in PDV (percentage of daily value).
 
-We have noticed that many recipes have "low fat", "low carb", and "low calories" in their title, possibly a means of attracting browsing. From EDA, we observed that 478 recipes contain "low fat" in their title; 262 recipes contain "low carb" in their title; 107 recipes contain "low cal" in their title. In reality, there are also many recipes that only advertise lower fat, lower carbohydrates, and lower calories and only mark this nutritional information. But we believe proteins are equally important for healthy eaters and should be predicted if not explicitly given. The information available to us at the “time of prediction” will be a combination of nutrition information: calories (#), total fat (PDV), and carbohydrates (PDV). Although these three pieces of information are the most commonly provided, we hope that our model can also predict the protein content of recipes for people who needs it.
+We have noticed that many recipes have "low fat", "low carb", and "low calories" in their title, possibly a means of attracting browsing. From EDA, we observed that 478 recipes contain "low fat" in their title; 262 recipes contain "low carb" in their title; 107 recipes contain "low cal" in their title. In reality, there are also many recipes that only advertise lower fat, lower carbohydrates, and lower calories and only mark this nutritional information. But we believe proteins are equally important for healthy eaters and should be predicted if not explicitly given. The information available to us at the “time of prediction” will be a combination of nutrition information: `calories`, `total fat` (PDV), and `carbohydrates` (PDV). Although these three pieces of information are the most commonly provided, we hope that our model can also predict the protein content of recipes for people who needs it.
 
 To evaluate our metric, we decided to use RMSE to measure the error in prediction. RMSE is a measure of the average magnitude of the errors in the predictions made by the model. A lower RMSE indicates a better fit. Both RMSE and R squared are commonly used metrics to evaluate the performance of regression models. However, there are several reasons why we believe RMSE will better predict our model, which makes it easier to understand and interpret. One of the advantages of RMSE is that it has the same unit as the target variable. In addition, R-squared may overestimate the goodness-of-fit of the model, if X variables in a model are highly correlated with each other. On the other hand, RMSE is more robust to multicollinearity. This allows us to better understand the model's predictive performance.
 
@@ -25,7 +25,7 @@ The baselind model is a linear regression model with degree of 2 polynomial feat
 - `carbohydrates` (PDV)
   - Carbohydrates can also affect protein content by affecting the overall nutritional content of a recipe. For example, recipes high in carbohydrates may be low in other nutrients like protein or fats, which can affect the overall protein content of the meal.
   
-Note: PDV stands for “percentage of daily value”
+**Note:** PDV stands for “percentage of daily value”
 
 At first, polynomial regression was used with polynomial features of degree 1 - 15, and the training and testing errors were visualized to observe any trends (refer figure below). It was found that the training and test errors for polynomials 1-4 were almost identical, making it difficult to choose which polynomial should be used for protein prediction and model evaluation. 
 
@@ -60,11 +60,13 @@ We added the following features to the dataframe: `sugar`, `sodium`, `saturated 
 The following **3 combincations** of varaibles can be used to predict protein content:
 1. `vegetarian`, `red_meat`, `calories`, `total_fat`, `carbohydrates`
   - Linear Regression: RMSE of training is 16.25; RMSE of testing is 16.17
-  - Degree of 1 Polynomial Regression with linear regression has same result as linear regression.
 2. `vegetarian`, `cooking_method`, `red_meat`, `calories`, `total_fat`, `carbohydrates`, `sugar`, `sodium`
   - Linear Regression: RMSE of training is 16.12; RMSE of testing is 16.06
 3. `cooking_method`, `red_meat`, `calories`, `total_fat`, `sugar`, `sodium`, `saturated_fat`, `carbohydrates`
   - Linear Regression: RMSE of training is 16.13; RMSE of testing is 16.08
+
+**Linear Regression and Degree 1 Polynomial Regression**
+I used GridSearchCV with cv=5 and polynomial degree from 1 to 5 to determine the best hyperparameters for the Polynomial Features model. The best hyperparameter was found to be a degree of 1 for the Polynomial Regression with Linear Regression combination. Interestingly, all three combinations of Polynomial Features of Linear Regression with degrees 1, 2, and 3 produced the same result as Linear Regression. This suggests that the addition of Polynomial Regression did not improve the accuracy of the model.
 
 **Random Forest Regression 🌲**
 
