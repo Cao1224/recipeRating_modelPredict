@@ -8,6 +8,11 @@ Our exploratory data analysis on this dataset can be [found](https://cao1224.git
 
 ## Problem Identification
 
+Continuing from our previous research, we thought it would be an interesting investigation to estimate the protein content of a recipe. Our prediction problem is: **How to predict the protein content of a recipe from other nutrition information?** We will produce a regression model to predict quantitative responses. The response variable we chose is the protein in PDV (percentage of daily value).
+
+We have noticed that many recipes have "low fat", "low carb", and "low calories" in their title, possibly a means of attracting browsing. From EDA, we observed that 478 recipes contain "low fat" in their title; 262 recipes contain "low carb" in their title; 107 recipes contain "low cal" in their title. In reality, there are also many recipes that only advertise lower fat, lower carbohydrates, and lower calories and only mark this nutritional information. But we believe proteins are equally important for healthy eaters and should be predicted if not explicitly given. The information available to us at the “time of prediction” will be a combination of nutrition information: calories (#), total fat (PDV), and carbohydrates (PDV). Although these three pieces of information are the most commonly provided, we hope that our model can also predict the protein content of recipes for people who needs it.
+
+To evaluate our metric, we decided to use RMSE to measure the error in prediction. RMSE is a measure of the average magnitude of the errors in the predictions made by the model. A lower RMSE indicates a better fit. Both RMSE and R squared are commonly used metrics to evaluate the performance of regression models. However, there are several reasons why we believe RMSE will better predict our model, which makes it easier to understand and interpret. One of the advantages of RMSE is that it has the same unit as the target variable. In addition, R-squared may overestimate the goodness-of-fit of the model, if X variables in a model are highly correlated with each other. On the other hand, RMSE is more robust to multicollinearity. This allows us to better understand the model's predictive performance.
 
 
 ## Baseline Model
@@ -39,7 +44,26 @@ Based on the results, both models seem to perform similarly, with the degree of 
 
 
 ## Final Model
+The dataframe has 11 columns including seasons, vegetarian, cooking_method, red_meat, calories, total_fat, sugar, sodium, saturated_fat, carbohydrates, and protein. The columns seasons, vegetarian, cooking_method, and red_meat represent the number of tags related to specific food items and are already numeric, so no transformer is needed for these columns.
 
-Since plant-based protein may have a different nutrient profile compared to animal-based protein, this can affect the amount of protein in a recipe. I decided to add tags about plant-based protein and animal-based protein as features.
+**New Features without Transformer**:
+- `seasons`: number of tags related to spring, summer, fall, and winter
+  - We included this variable as it may impact the nutritional content of the recipes. For example, certain seasons may be associated with higher availability of certain ingredients, which in turn may affect the protein content of the recipe.
+- `cooking_method`: number of tags related to oven and steam
+  - We included this variable as different cooking methods may have different effects on the nutritional content of the recipe, such as the protein content.
+- `red_meat`: number of tags related to beef-organ-meats, beef, and roast_beef
+  - We included this variable as it may impact the protein content of the recipe. Red meat is a common source of protein, and recipes that include red meat may have higher protein content compared to those that do not.
+
+The following 3 combincations of varaibles can be used to predict protein content:
+1. vegetarian, red_meat, calories, total_fat, carbohydrates
+  - Linear Regressioon: RMSE of training is 16.25; RMSE of testing is 16.17
+  - 
+2. vegetarian, cooking_method, red_meat, calories, total_fat, carbohydrates, sugar, sodium
+  - Linear Regressioon: RMSE of training is 16.12; RMSE of testing is 16.06
+3. cooking_method, red_meat, calories, total_fat, sugar, sodium, saturated_fat, carbohydrates
+  - Linear Regressioon: RMSE of training is 16.13; RMSE of testing is 16.08
+
+
+
 
 ## Fairness Analysis
